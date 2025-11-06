@@ -1,0 +1,97 @@
+CREATE TABLE Student (
+    student_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    department VARCHAR(30),
+    year_of_study INT,
+    age INT
+);
+
+CREATE TABLE Marks (
+    mark_id INT PRIMARY KEY,
+    student_id INT,
+    subject VARCHAR(50),
+    marks_obtained INT CHECK (marks_obtained BETWEEN 0 AND 100),
+    FOREIGN KEY (student_id) REFERENCES Student(student_id)
+);
+
+CREATE TABLE Result (
+    result_id INT PRIMARY KEY,
+    student_id INT,
+    total_marks INT,
+    percentage DECIMAL(5,2),
+    grade CHAR(2),
+    FOREIGN KEY (student_id) REFERENCES Student(student_id)
+);
+
+INSERT INTO Student VALUES (101, 'Riya', 'Sharma', 'CSE', 3, 20);
+INSERT INTO Student VALUES (102, 'Karan', 'Patel', 'IT', 2, 19);
+INSERT INTO Student VALUES (103, 'Sneha', 'Nair', 'ECE', 4, 21);
+INSERT INTO Student VALUES (104, 'Arjun', 'Mehta', 'CSE', 1, 18);
+INSERT INTO Student VALUES (105, 'Priya', 'Verma', 'MECH', 3, 20);
+
+INSERT INTO Marks VALUES (1, 101, 'Database Systems', 85);
+INSERT INTO Marks VALUES (2, 101, 'Operating Systems', 90);
+INSERT INTO Marks VALUES (3, 102, 'Networking', 76);
+INSERT INTO Marks VALUES (4, 103, 'Microprocessors', 88);
+INSERT INTO Marks VALUES (5, 104, 'Mathematics', 67);
+INSERT INTO Marks VALUES (6, 105, 'Thermodynamics', 79);
+
+UPDATE Marks
+SET marks_obtained = marks_obtained + 5
+WHERE subject = 'Mathematics';
+
+DELETE FROM Student
+WHERE student_id IN (
+    SELECT student_id FROM Marks WHERE marks_obtained < 40
+);
+
+INSERT INTO Result (result_id, student_id, total_marks, percentage, grade)
+SELECT 
+    ROWNUM, 
+    s.student_id,
+    SUM(m.marks_obtained) AS total_marks,
+    (SUM(m.marks_obtained)/COUNT(m.subject)) AS percentage,
+    CASE 
+        WHEN (SUM(m.marks_obtained)/COUNT(m.subject)) >= 85 THEN 'A'
+        WHEN (SUM(m.marks_obtained)/COUNT(m.subject)) >= 70 THEN 'B'
+        WHEN (SUM(m.marks_obtained)/COUNT(m.subject)) >= 50 THEN 'C'
+        ELSE 'F'
+    END AS grade
+FROM Student s
+JOIN Marks m ON s.student_id = m.student_id
+GROUP BY s.student_id;
+
+SELECT s.first_name, s.last_name, r.grade
+FROM Student s
+JOIN Result r ON s.student_id = r.student_id
+WHERE r.grade IN ('A', 'B');
+
+SELECT * FROM Student
+WHERE department = 'CSE' AND year_of_study >= 2 OR age < 19;
+
+SELECT department, COUNT(student_id) AS total_students, AVG(age) AS avg_age
+FROM Student
+GROUP BY department;
+
+SELECT 
+    UPPER(first_name || ' ' || last_name) AS full_name,
+    ABS(percentage - 100) AS marks_gap
+FROM Result r
+JOIN Student s ON s.student_id = r.student_id;
+
+SELECT s.first_name, s.last_name, r.percentage
+FROM Student s
+JOIN Result r ON s.student_id = r.student_id
+WHERE r.percentage >= 70
+ORDER BY r.percentage DESC
+FETCH FIRST 3 ROWS ONLY;
+
+SELECT student_id, department FROM Student WHERE department = 'CSE'
+UNION
+SELECT student_id, department FROM Student WHERE department = 'IT';
+
+SELECT s.first_name, s.last_name, r.percentage, r.grade
+FROM Student s
+JOIN Result r ON s.student_id = r.student_id
+WHERE r.grade = 'F' OR r.percentage < 50;
