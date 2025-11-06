@@ -1,0 +1,29 @@
+import com.mongodb.client.*;
+import org.bson.Document;
+import static com.mongodb.client.model.Filters.eq;
+
+public class MongoDBOperations {
+    public static void main(String[] args) {
+        MongoClient client = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase db = client.getDatabase("studentDB");
+        MongoCollection<Document> coll = db.getCollection("students");
+
+        coll.insertOne(new Document("roll_no", 1).append("name", "Aryan").append("marks", 89));
+        coll.insertOne(new Document("roll_no", 2).append("name", "Gore").append("marks", 92));
+
+        System.out.println("All Records:");
+        for (Document d : coll.find()) System.out.println(d.toJson());
+
+        coll.updateOne(eq("roll_no", 1), new Document("$set", new Document("marks", 95)));
+
+        System.out.println("After Update:");
+        for (Document d : coll.find()) System.out.println(d.toJson());
+
+        coll.deleteOne(eq("roll_no", 2));
+
+        System.out.println("After Deletion:");
+        for (Document d : coll.find()) System.out.println(d.toJson());
+
+        client.close();
+    }
+}

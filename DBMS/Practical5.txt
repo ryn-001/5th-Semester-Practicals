@@ -1,0 +1,64 @@
+-- Creating Tables
+CREATE TABLE Stud_Marks (
+    Roll NUMBER PRIMARY KEY,
+    Name VARCHAR2(50),
+    Total_Marks NUMBER
+);
+
+CREATE TABLE Result (
+    Roll NUMBER,
+    Name VARCHAR2(50),
+    Class VARCHAR2(30)
+);
+
+-- Inserting Sample Data
+INSERT INTO Stud_Marks VALUES (1, 'Aryan Khaire', 1450);
+INSERT INTO Stud_Marks VALUES (2, 'Riya Sharma', 950);
+INSERT INTO Stud_Marks VALUES (3, 'Neha Patel', 880);
+INSERT INTO Stud_Marks VALUES (4, 'Rohan Deshmukh', 810);
+INSERT INTO Stud_Marks VALUES (5, 'Kavita Joshi', 1320);
+
+COMMIT;
+
+-- Creating Stored Procedure
+CREATE OR REPLACE PROCEDURE proc_Grade IS
+    CURSOR c1 IS SELECT Roll, Name, Total_Marks FROM Stud_Marks;
+    v_roll Stud_Marks.Roll%TYPE;
+    v_name Stud_Marks.Name%TYPE;
+    v_marks Stud_Marks.Total_Marks%TYPE;
+    v_class VARCHAR2(30);
+BEGIN
+    OPEN c1;
+    LOOP
+        FETCH c1 INTO v_roll, v_name, v_marks;
+        EXIT WHEN c1%NOTFOUND;
+
+        IF v_marks BETWEEN 990 AND 1500 THEN
+            v_class := 'Distinction';
+        ELSIF v_marks BETWEEN 900 AND 989 THEN
+            v_class := 'First Class';
+        ELSIF v_marks BETWEEN 825 AND 899 THEN
+            v_class := 'Higher Second Class';
+        ELSE
+            v_class := 'Fail';
+        END IF;
+
+        INSERT INTO Result(Roll, Name, Class) VALUES(v_roll, v_name, v_class);
+    END LOOP;
+    CLOSE c1;
+    DBMS_OUTPUT.PUT_LINE('Grades Assigned Successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+/
+
+-- Using the Procedure
+SET SERVEROUTPUT ON;
+BEGIN
+    proc_Grade;
+END;
+/
+
+-- Displaying the Results
+SELECT * FROM Result;

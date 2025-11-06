@@ -1,0 +1,124 @@
+CREATE TABLE Department (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(50),
+    location VARCHAR(50)
+);
+
+CREATE TABLE Employee (
+    emp_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    dept_id INT,
+    salary DECIMAL(10,2),
+    hire_date DATE,
+    performance_rating INT CHECK (performance_rating BETWEEN 1 AND 5),
+    FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
+);
+
+CREATE TABLE Project (
+    project_id INT PRIMARY KEY,
+    project_name VARCHAR(50),
+    dept_id INT,
+    budget DECIMAL(12,2),
+    FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
+);
+
+CREATE TABLE Emp_Project (
+    emp_id INT,
+    project_id INT,
+    hours_worked INT,
+    PRIMARY KEY (emp_id, project_id),
+    FOREIGN KEY (emp_id) REFERENCES Employee(emp_id),
+    FOREIGN KEY (project_id) REFERENCES Project(project_id)
+);
+
+INSERT INTO Department VALUES (1, 'IT', 'Bangalore');
+INSERT INTO Department VALUES (2, 'HR', 'Mumbai');
+INSERT INTO Department VALUES (3, 'Finance', 'Delhi');
+INSERT INTO Department VALUES (4, 'Marketing', 'Pune');
+
+INSERT INTO Employee VALUES (101, 'Riya', 'Sharma', 1, 95000, DATE '2020-05-10', 5);
+INSERT INTO Employee VALUES (102, 'Karan', 'Patel', 1, 88000, DATE '2019-09-21', 4);
+INSERT INTO Employee VALUES (103, 'Sneha', 'Nair', 2, 60000, DATE '2021-03-15', 3);
+INSERT INTO Employee VALUES (104, 'Arjun', 'Mehta', 3, 120000, DATE '2018-07-19', 5);
+INSERT INTO Employee VALUES (105, 'Priya', 'Verma', 4, 75000, DATE '2022-01-11', 4);
+INSERT INTO Employee VALUES (106, 'Rohan', 'Joshi', 3, 110000, DATE '2019-11-25', 4);
+INSERT INTO Employee VALUES (107, 'Nisha', 'Bhat', 2, 58000, DATE '2020-02-20', 2);
+
+INSERT INTO Project VALUES (201, 'ERP System', 1, 1500000);
+INSERT INTO Project VALUES (202, 'Recruitment Portal', 2, 400000);
+INSERT INTO Project VALUES (203, 'Budget Forecast', 3, 800000);
+INSERT INTO Project VALUES (204, 'Ad Campaign', 4, 600000);
+
+INSERT INTO Emp_Project VALUES (101, 201, 160);
+INSERT INTO Emp_Project VALUES (102, 201, 140);
+INSERT INTO Emp_Project VALUES (103, 202, 100);
+INSERT INTO Emp_Project VALUES (104, 203, 180);
+INSERT INTO Emp_Project VALUES (106, 203, 150);
+INSERT INTO Emp_Project VALUES (105, 204, 120);
+INSERT INTO Emp_Project VALUES (107, 202, 90);
+
+CREATE VIEW view_employee_details AS
+SELECT 
+    e.emp_id,
+    e.first_name || ' ' || e.last_name AS full_name,
+    d.dept_name,
+    e.salary,
+    e.performance_rating
+FROM Employee e
+JOIN Department d ON e.dept_id = d.dept_id;
+
+SELECT d.dept_name, e.first_name, e.last_name, e.salary
+FROM Department d
+JOIN Employee e ON d.dept_id = e.dept_id
+ORDER BY d.dept_name;
+
+SELECT e.first_name, e.last_name, d.dept_name, e.salary
+FROM Employee e
+JOIN Department d ON e.dept_id = d.dept_id
+WHERE e.salary = (
+    SELECT MAX(salary) FROM Employee WHERE dept_id = d.dept_id
+);
+
+SELECT p.project_name, COUNT(ep.emp_id) AS total_employees
+FROM Project p
+LEFT JOIN Emp_Project ep ON p.project_id = ep.project_id
+GROUP BY p.project_name;
+
+SELECT e.first_name, e.last_name, e.salary
+FROM Employee e
+WHERE e.salary > (
+    SELECT AVG(salary) FROM Employee WHERE dept_id = e.dept_id
+);
+
+SELECT e.first_name, e.last_name, d.dept_name
+FROM Employee e
+RIGHT JOIN Department d ON e.dept_id = d.dept_id
+ORDER BY d.dept_name;
+
+SELECT e.first_name, e.last_name, p.project_name
+FROM Employee e
+JOIN Emp_Project ep ON e.emp_id = ep.emp_id
+JOIN Project p ON ep.project_id = p.project_id
+WHERE ep.hours_worked > 120;
+
+SELECT e.first_name, e.last_name, e.performance_rating, e.salary
+FROM Employee e
+WHERE e.performance_rating >= 4 AND e.salary BETWEEN 80000 AND 130000;
+
+SELECT dept_name, AVG(salary) AS avg_salary, MAX(salary) AS max_salary
+FROM Employee e
+JOIN Department d ON e.dept_id = d.dept_id
+GROUP BY dept_name
+HAVING AVG(salary) > 70000;
+
+SELECT e.first_name, e.last_name, e.salary, d.dept_name
+FROM Employee e
+JOIN Department d ON e.dept_id = d.dept_id
+WHERE e.emp_id IN (
+    SELECT emp_id FROM Emp_Project WHERE project_id IN (
+        SELECT project_id FROM Project WHERE budget > 700000
+    )
+);
+
+SELECT * FROM view_employee_details WHERE performance_rating = 5 ORDER BY salary DESC;

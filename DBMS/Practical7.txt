@@ -1,0 +1,103 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class DatabaseNavigation {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+
+        try {
+            // ----- MySQL Connection -----
+            // For Oracle: "jdbc:oracle:thin:@localhost:1521:xe", "system", "password"
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/college", "root", "password");
+
+            st = con.createStatement();
+            int choice;
+
+            do {
+                System.out.println("\n===== STUDENT DATABASE MENU =====");
+                System.out.println("1. Add Record");
+                System.out.println("2. View Records");
+                System.out.println("3. Update Record");
+                System.out.println("4. Delete Record");
+                System.out.println("5. Exit");
+                System.out.print("Enter your choice: ");
+                choice = sc.nextInt();
+                sc.nextLine(); // consume newline
+
+                switch (choice) {
+                    case 1:
+                        System.out.print("Enter Roll No: ");
+                        int roll = sc.nextInt();
+                        sc.nextLine();
+                        System.out.print("Enter Name: ");
+                        String name = sc.nextLine();
+                        System.out.print("Enter Marks: ");
+                        int marks = sc.nextInt();
+
+                        String insert = "INSERT INTO student VALUES(" + roll + ", '" + name + "', " + marks + ")";
+                        st.executeUpdate(insert);
+                        System.out.println("Record Added Successfully!");
+                        break;
+
+                    case 2:
+                        rs = st.executeQuery("SELECT * FROM student");
+                        System.out.println("\nRoll\tName\tMarks");
+                        System.out.println("--------------------------");
+                        while (rs.next()) {
+                            System.out.println(rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getInt(3));
+                        }
+                        break;
+
+                    case 3:
+                        System.out.print("Enter Roll No to Update: ");
+                        int rno = sc.nextInt();
+                        sc.nextLine();
+                        System.out.print("Enter New Marks: ");
+                        int newMarks = sc.nextInt();
+
+                        String update = "UPDATE student SET marks=" + newMarks + " WHERE roll=" + rno;
+                        int updated = st.executeUpdate(update);
+                        if (updated > 0)
+                            System.out.println("Record Updated Successfully!");
+                        else
+                            System.out.println("Record Not Found!");
+                        break;
+
+                    case 4:
+                        System.out.print("Enter Roll No to Delete: ");
+                        int dno = sc.nextInt();
+
+                        String delete = "DELETE FROM student WHERE roll=" + dno;
+                        int deleted = st.executeUpdate(delete);
+                        if (deleted > 0)
+                            System.out.println("Record Deleted Successfully!");
+                        else
+                            System.out.println("Record Not Found!");
+                        break;
+
+                    case 5:
+                        System.out.println("Exiting...");
+                        break;
+
+                    default:
+                        System.out.println("Invalid Choice!");
+                }
+            } while (choice != 5);
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (st != null) st.close();
+                if (con != null) con.close();
+            } catch (Exception ex) {
+                System.out.println("Error closing resources: " + ex);
+            }
+        }
+    }
+}

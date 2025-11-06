@@ -1,0 +1,43 @@
+use OnlineShoppingDB;
+db.customers.drop();
+db.products.drop();
+db.orders.drop();
+
+db.customers.insertMany([
+  { _id: 1, name: "Aryan Khaire", email: "aryan@gmail.com", city: "Pune", phone: "9876543210" },
+  { _id: 2, name: "Riya Sharma", email: "riya@gmail.com", city: "Mumbai", phone: "9998877766" },
+  { _id: 3, name: "Neha Patel", email: "neha@gmail.com", city: "Delhi", phone: "8887766554" }
+]);
+
+db.products.insertMany([
+  { _id: 101, name: "Laptop", brand: "HP", price: 55000, stock: 20 },
+  { _id: 102, name: "Smartphone", brand: "Samsung", price: 30000, stock: 50 },
+  { _id: 103, name: "Headphones", brand: "Sony", price: 4000, stock: 100 }
+]);
+
+db.orders.insertMany([
+  { _id: 501, customer_id: 1, product_id: 101, quantity: 1, total: 55000, status: "Delivered" },
+  { _id: 502, customer_id: 2, product_id: 102, quantity: 2, total: 60000, status: "Pending" }
+]);
+
+db.customers.find();
+db.products.find({}, { name: 1, brand: 1, price: 1 });
+db.customers.find({ city: "Mumbai" });
+db.products.find({ price: { $gt: 10000 } });
+db.products.find({ $and: [ { price: { $gt: 10000 } }, { price: { $lt: 50000 } } ] });
+db.orders.find({ $or: [ { status: "Delivered" }, { status: "Pending" } ] });
+
+db.products.updateOne({ _id: 103 }, { $set: { price: 4500 } });
+db.products.updateMany({ stock: { $lt: 50 } }, { $inc: { stock: 10 } });
+db.orders.updateMany({ $or: [ { status: "Pending" }, { status: "Processing" } ] }, { $set: { status: "Delivered" } });
+
+db.customers.save({ _id: 3, name: "Neha Patel", email: "neha_new@gmail.com", city: "Delhi", phone: "8887766554" });
+db.customers.save({ _id: 4, name: "Rohan Deshmukh", email: "rohan@gmail.com", city: "Nagpur", phone: "9999999999" });
+
+db.products.deleteOne({ _id: 103 });
+db.customers.deleteMany({ city: "Delhi" });
+db.orders.deleteMany({ status: "Delivered" });
+
+db.customers.find().pretty();
+db.products.find().pretty();
+db.orders.find().pretty();

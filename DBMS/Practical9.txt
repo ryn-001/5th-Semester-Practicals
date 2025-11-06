@@ -1,0 +1,37 @@
+use onlineShop
+
+db.orders.drop()
+db.orders.insertMany([
+  { customer: "Aryan", product: "Laptop", quantity: 1, price: 70000, category: "Electronics" },
+  { customer: "Gore", product: "Phone", quantity: 2, price: 30000, category: "Electronics" },
+  { customer: "Aryan", product: "Shoes", quantity: 3, price: 2000, category: "Fashion" },
+  { customer: "Riya", product: "Jacket", quantity: 1, price: 3500, category: "Fashion" },
+  { customer: "Gore", product: "Mouse", quantity: 2, price: 800, category: "Electronics" }
+])
+
+// a) Aggregation and Indexing
+print("=== Aggregation Example ===")
+db.orders.aggregate([
+  { $group: { _id: "$customer", total_spent: { $sum: { $multiply: ["$quantity", "$price"] } }, items_bought: { $sum: "$quantity" } } },
+  { $sort: { total_spent: -1 } }
+]).forEach(printjson)
+
+// Creating index on category and price
+db.orders.createIndex({ category: 1, price: -1 })
+
+print("=== Indexed Query Example ===")
+db.orders.find({ category: "Electronics", price: { $gt: 1000 } })
+
+// b) MapReduce Example
+print("=== MapReduce Example ===")
+var mapFunction = function() {
+  emit(this.category, this.price * this.quantity)
+}
+
+var reduceFunction = function(key, values) {
+  return Array.sum(values)
+}
+
+db.orders.mapReduce(mapFunction, reduceFunction, { out: "categorySales" })
+
+db.categorySales.find().forEach(printjson)

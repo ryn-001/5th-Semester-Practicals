@@ -1,0 +1,80 @@
+-- Creating Tables
+CREATE TABLE Borrower (
+    Rollin NUMBER PRIMARY KEY,
+    Name VARCHAR2(50),
+    DateofIssue DATE,
+    NameofBook VARCHAR2(100),
+    Status CHAR(1)
+);
+
+CREATE TABLE Fine (
+    Roll_no NUMBER,
+    Date DATE,
+    Amt NUMBER,
+    FOREIGN KEY (Roll_no) REFERENCES Borrower(Rollin)
+);
+
+-- Inserting Sample Data
+INSERT INTO Borrower VALUES (101, 'Riya Sharma', TO_DATE('2024-10-01', 'YYYY-MM-DD'), 'DBMS Concepts', 'I');
+INSERT INTO Borrower VALUES (102, 'Aryan Khaire', TO_DATE('2024-10-10', 'YYYY-MM-DD'), 'Operating Systems', 'I');
+INSERT INTO Borrower VALUES (103, 'Neha Patel', TO_DATE('2024-11-01', 'YYYY-MM-DD'), 'Computer Networks', 'I');
+
+COMMIT;
+
+-- PL/SQL Block
+SET SERVEROUTPUT ON;
+DECLARE
+    v_roll_no     Borrower.Rollin%TYPE;
+    v_book_name   Borrower.NameofBook%TYPE;
+    v_date_issue  Borrower.DateofIssue%TYPE;
+    v_days        NUMBER;
+    v_fine_amt    NUMBER := 0;
+    v_status      Borrower.Status%TYPE;
+BEGIN
+    v_roll_no := &Roll_No;
+    v_book_name := '&Book_Name';
+
+    SELECT DateofIssue, Status
+    INTO v_date_issue, v_status
+    FROM Borrower
+    WHERE Rollin = v_roll_no AND NameofBook = v_book_name;
+
+    IF v_status = 'R' THEN
+        DBMS_OUTPUT.PUT_LINE('Book already returned.');
+        RETURN;
+    END IF;
+
+    v_days := TRUNC(SYSDATE - v_date_issue);
+
+    IF v_days > 30 THEN
+        v_fine_amt := v_days * 50;
+    ELSIF v_days >= 15 THEN
+        v_fine_amt := v_days * 5;
+    ELSE
+        v_fine_amt := 0;
+    END IF;
+
+    UPDATE Borrower
+    SET Status = 'R'
+    WHERE Rollin = v_roll_no AND NameofBook = v_book_name;
+
+    IF v_fine_amt > 0 THEN
+        INSERT INTO Fine(Roll_no, Date, Amt)
+        VALUES(v_roll_no, SYSDATE, v_fine_amt);
+        DBMS_OUTPUT.PUT_LINE('Fine Recorded: Rs ' || v_fine_amt);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('No Fine.');
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE('Book Returned Successfully.');
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No record found for given Roll No or Book.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+/
+
+-- Displaying Tables
+SELECT * FROM Borrower;
+SELECT * FROM Fine;
