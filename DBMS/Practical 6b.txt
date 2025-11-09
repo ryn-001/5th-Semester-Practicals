@@ -1,0 +1,40 @@
+CREATE TABLE Library (
+    book_id NUMBER PRIMARY KEY,
+    title VARCHAR2(100),
+    author VARCHAR2(100),
+    price NUMBER
+);
+
+CREATE TABLE Library_Audit (
+    audit_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    book_id NUMBER,
+    title VARCHAR2(100),
+    author VARCHAR2(100),
+    price NUMBER,
+    action_type VARCHAR2(10),
+    action_date DATE
+);
+
+CREATE OR REPLACE TRIGGER trg_Library_Audit
+AFTER UPDATE OR DELETE ON Library
+FOR EACH ROW
+BEGIN
+    IF UPDATING THEN
+        INSERT INTO Library_Audit (book_id, title, author, price, action_type, action_date)
+        VALUES (:OLD.book_id, :OLD.title, :OLD.author, :OLD.price, 'UPDATE', SYSDATE);
+    ELSIF DELETING THEN
+        INSERT INTO Library_Audit (book_id, title, author, price, action_type, action_date)
+        VALUES (:OLD.book_id, :OLD.title, :OLD.author, :OLD.price, 'DELETE', SYSDATE);
+    END IF;
+END;
+/
+
+INSERT INTO Library VALUES (1, 'Wings of Fire', 'A.P.J. Abdul Kalam', 300);
+INSERT INTO Library VALUES (2, '1984', 'George Orwell', 250);
+COMMIT;
+
+UPDATE Library SET price = 350 WHERE book_id = 1;
+DELETE FROM Library WHERE book_id = 2;
+COMMIT;
+
+SELECT * FROM Library_Audit;

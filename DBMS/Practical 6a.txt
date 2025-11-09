@@ -1,0 +1,62 @@
+SET SERVEROUTPUT ON;
+
+CREATE TABLE O_RollCall (
+    roll_no NUMBER PRIMARY KEY,
+    name VARCHAR2(50),
+    attendance_date DATE
+);
+
+CREATE TABLE N_RollCall (
+    roll_no NUMBER,
+    name VARCHAR2(50),
+    attendance_date DATE
+);
+
+INSERT INTO O_RollCall VALUES (1, 'Aryan', TO_DATE('2025-11-09', 'YYYY-MM-DD'));
+INSERT INTO O_RollCall VALUES (2, 'Gore', TO_DATE('2025-11-09', 'YYYY-MM-DD'));
+
+INSERT INTO N_RollCall VALUES (2, 'Gore', TO_DATE('2025-11-09', 'YYYY-MM-DD'));
+INSERT INTO N_RollCall VALUES (3, 'Riya', TO_DATE('2025-11-09', 'YYYY-MM-DD'));
+INSERT INTO N_RollCall VALUES (4, 'Karan', TO_DATE('2025-11-09', 'YYYY-MM-DD'));
+
+COMMIT;
+
+DECLARE
+    CURSOR c_new_data(p_date DATE) IS
+        SELECT roll_no, name, attendance_date
+        FROM N_RollCall
+        WHERE attendance_date = p_date;
+
+    v_rec c_new_data%ROWTYPE;
+    v_exists NUMBER;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('--- Starting Merge Process ---');
+
+    OPEN c_new_data(SYSDATE);
+
+    LOOP
+        FETCH c_new_data INTO v_rec;
+        EXIT WHEN c_new_data%NOTFOUND;
+
+        SELECT COUNT(*)
+        INTO v_exists
+        FROM O_RollCall
+        WHERE roll_no = v_rec.roll_no;
+
+        IF v_exists = 0 THEN
+            INSERT INTO O_RollCall (roll_no, name, attendance_date)
+            VALUES (v_rec.roll_no, v_rec.name, v_rec.attendance_date);
+            DBMS_OUTPUT.PUT_LINE('Inserted Roll No: ' || v_rec.roll_no);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Skipped Roll No: ' || v_rec.roll_no);
+        END IF;
+    END LOOP;
+
+    CLOSE c_new_data;
+
+    DBMS_OUTPUT.PUT_LINE('--- Merge Process Completed ---');
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+/
