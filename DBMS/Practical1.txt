@@ -1,47 +1,52 @@
-CREATE SEQUENCE seq_student_id START WITH 1000 INCREMENT BY 1;
-CREATE SEQUENCE seq_book_id START WITH 5000 INCREMENT BY 1;
-CREATE SEQUENCE seq_transaction_id START WITH 10000 INCREMENT BY 1;
+-- Create Database (optional)
+CREATE DATABASE IF NOT EXISTS college_library;
+USE college_library;
+
+-- Since MySQL doesn’t support SEQUENCE objects directly (pre-MySQL 8.0.17),
+-- we use AUTO_INCREMENT instead.
 
 CREATE TABLE students (
-    student_id      NUMBER DEFAULT seq_student_id.NEXTVAL PRIMARY KEY,
-    first_name      VARCHAR2(50) NOT NULL,
-    last_name       VARCHAR2(50) NOT NULL,
-    email           VARCHAR2(100) UNIQUE NOT NULL,
-    phone_no        VARCHAR2(15) UNIQUE,
-    department      VARCHAR2(50) CHECK (department IN ('CSE','IT','ECE','MECH','CIVIL','EEE')),
-    admission_year  NUMBER(4) CHECK (admission_year >= 2000 AND admission_year <= EXTRACT(YEAR FROM SYSDATE))
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone_no VARCHAR(15) UNIQUE,
+    department ENUM('CSE','IT','ECE','MECH','CIVIL','EEE'),
+    admission_year YEAR CHECK (admission_year >= 2000 AND admission_year <= YEAR(CURDATE()))
 );
 
 CREATE TABLE books (
-    book_id         NUMBER DEFAULT seq_book_id.NEXTVAL PRIMARY KEY,
-    title           VARCHAR2(100) NOT NULL,
-    author          VARCHAR2(100),
-    publisher       VARCHAR2(100),
-    isbn            VARCHAR2(20) UNIQUE NOT NULL,
-    category        VARCHAR2(50) CHECK (category IN ('Science','Technology','Engineering','Maths','Fiction','Non-Fiction','Others')),
-    total_copies    NUMBER CHECK (total_copies >= 0),
-    available_copies NUMBER CHECK (available_copies >= 0)
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    author VARCHAR(100),
+    publisher VARCHAR(100),
+    isbn VARCHAR(20) UNIQUE NOT NULL,
+    category ENUM('Science','Technology','Engineering','Maths','Fiction','Non-Fiction','Others'),
+    total_copies INT CHECK (total_copies >= 0),
+    available_copies INT CHECK (available_copies >= 0)
 );
 
 CREATE TABLE transactions (
-    transaction_id  NUMBER DEFAULT seq_transaction_id.NEXTVAL PRIMARY KEY,
-    student_id      NUMBER NOT NULL,
-    book_id         NUMBER NOT NULL,
-    issue_date      DATE DEFAULT SYSDATE NOT NULL,
-    due_date        DATE,
-    return_date     DATE,
-    fine_amount     NUMBER(6,2) DEFAULT 0 CHECK (fine_amount >= 0),
-    CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES students(student_id),
-    CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES books(book_id)
+    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    book_id INT NOT NULL,
+    issue_date DATE NOT NULL DEFAULT (CURDATE()),
+    due_date DATE,
+    return_date DATE,
+    fine_amount DECIMAL(6,2) DEFAULT 0 CHECK (fine_amount >= 0),
+    CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+    CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE
 );
 
+-- Indexes
 CREATE INDEX idx_books_title ON books(title);
 CREATE INDEX idx_students_dept ON students(department);
 
-CREATE VIEW view_issued_books AS
+-- View
+CREATE OR REPLACE VIEW view_issued_books AS
 SELECT 
     t.transaction_id,
-    s.first_name || ' ' || s.last_name AS student_name,
+    CONCAT(s.first_name, ' ', s.last_name) AS student_name,
     b.title AS book_title,
     t.issue_date,
     t.due_date,
@@ -51,58 +56,55 @@ FROM transactions t
 JOIN students s ON t.student_id = s.student_id
 JOIN books b ON t.book_id = b.book_id;
 
-CREATE SYNONYM stu FOR students;
-CREATE SYNONYM bk FOR books;
-CREATE SYNONYM txn FOR transactions;
-
+-- Insert sample students
 INSERT INTO students (first_name, last_name, email, phone_no, department, admission_year)
-VALUES ('Riya', 'Sharma', 'riya.sharma@college.edu', '9123456789', 'IT', 2022);
+VALUES 
+('Riya', 'Sharma', 'riya.sharma@college.edu', '9123456789', 'IT', 2022),
+('Karan', 'Patel', 'karan.patel@college.edu', '9898989898', 'CSE', 2023),
+('Sneha', 'Nair', 'sneha.nair@college.edu', '9812345678', 'ECE', 2021);
 
-INSERT INTO students (first_name, last_name, email, phone_no, department, admission_year)
-VALUES ('Karan', 'Patel', 'karan.patel@college.edu', '9898989898', 'CSE', 2023);
-
-INSERT INTO students (first_name, last_name, email, phone_no, department, admission_year)
-VALUES ('Sneha', 'Nair', 'sneha.nair@college.edu', '9812345678', 'ECE', 2021);
-
+-- Insert sample books
 INSERT INTO books (title, author, publisher, isbn, category, total_copies, available_copies)
-VALUES ('Introduction to Algorithms', 'Thomas H. Cormen', 'MIT Press', '9780262033848', 'Technology', 15, 15);
+VALUES
+('Introduction to Algorithms', 'Thomas H. Cormen', 'MIT Press', '9780262033848', 'Technology', 15, 15),
+('Digital Electronics', 'M. Morris Mano', 'Pearson', '9780131989245', 'Engineering', 8, 8),
+('Thermodynamics', 'Yunus Cengel', 'McGraw-Hill', '9780073398174', 'Science', 10, 10);
 
-INSERT INTO books (title, author, publisher, isbn, category, total_copies, available_copies)
-VALUES ('Digital Electronics', 'M. Morris Mano', 'Pearson', '9780131989245', 'Engineering', 8, 8);
-
-INSERT INTO books (title, author, publisher, isbn, category, total_copies, available_copies)
-VALUES ('Thermodynamics', 'Yunus Cengel', 'McGraw-Hill', '9780073398174', 'Science', 10, 10);
-
+-- Insert transactions (AUTO_INCREMENT handles IDs)
 INSERT INTO transactions (student_id, book_id, due_date)
-VALUES (1000, 5000, SYSDATE + 14);
+VALUES
+(1, 1, DATE_ADD(CURDATE(), INTERVAL 14 DAY)),
+(2, 2, DATE_ADD(CURDATE(), INTERVAL 10 DAY)),
+(3, 3, DATE_ADD(CURDATE(), INTERVAL 7 DAY));
 
-INSERT INTO transactions (student_id, book_id, due_date)
-VALUES (1001, 5001, SYSDATE + 10);
-
-INSERT INTO transactions (student_id, book_id, due_date)
-VALUES (1002, 5002, SYSDATE + 7);
-
+-- Update transactions (set fine)
 UPDATE transactions
-SET return_date = SYSDATE, fine_amount = 50
-WHERE transaction_id = 10000;
+SET return_date = CURDATE(), fine_amount = 50
+WHERE transaction_id = 1;
 
+-- Decrement available copies
 UPDATE books
 SET available_copies = available_copies - 1
-WHERE book_id = 5000;
+WHERE book_id = 1;
 
+-- View issued books
 SELECT * FROM view_issued_books;
 
+-- Query: count issued books per student and department
 SELECT s.first_name, s.department, COUNT(t.transaction_id) AS total_issued
 FROM students s
 JOIN transactions t ON s.student_id = t.student_id
 GROUP BY s.first_name, s.department;
 
+-- Query: available books in Technology category
 SELECT b.title, b.available_copies
 FROM books b
 WHERE b.category = 'Technology';
 
-DELETE FROM transactions WHERE transaction_id = 10002;
+-- Delete a transaction
+DELETE FROM transactions WHERE transaction_id = 3;
 
-SELECT * FROM stu;
-SELECT * FROM bk;
-SELECT * FROM txn;
+-- Display data
+SELECT * FROM students;
+SELECT * FROM books;
+SELECT * FROM transactions;
