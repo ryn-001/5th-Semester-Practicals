@@ -16,7 +16,7 @@ CREATE TABLE Marks (
 );
 
 CREATE TABLE Result (
-    result_id INT PRIMARY KEY,
+    result_id INT PRIMARY KEY AUTO_INCREMENT,
     student_id INT,
     total_marks INT,
     percentage DECIMAL(5,2),
@@ -41,56 +41,63 @@ UPDATE Marks
 SET marks_obtained = marks_obtained + 5
 WHERE subject = 'Mathematics';
 
-DELETE FROM Student
-WHERE student_id IN (
-    SELECT student_id FROM Marks WHERE marks_obtained < 40
-);
+-- Delete students with marks < 40
+DELETE s FROM Student s
+JOIN Marks m ON s.student_id = m.student_id
+WHERE m.marks_obtained < 40;
 
-INSERT INTO Result (result_id, student_id, total_marks, percentage, grade)
+-- Insert into Result table
+INSERT INTO Result (student_id, total_marks, percentage, grade)
 SELECT 
-    ROWNUM, 
     s.student_id,
     SUM(m.marks_obtained) AS total_marks,
-    (SUM(m.marks_obtained)/COUNT(m.subject)) AS percentage,
+    SUM(m.marks_obtained)/COUNT(m.subject) AS percentage,
     CASE 
-        WHEN (SUM(m.marks_obtained)/COUNT(m.subject)) >= 85 THEN 'A'
-        WHEN (SUM(m.marks_obtained)/COUNT(m.subject)) >= 70 THEN 'B'
-        WHEN (SUM(m.marks_obtained)/COUNT(m.subject)) >= 50 THEN 'C'
+        WHEN SUM(m.marks_obtained)/COUNT(m.subject) >= 85 THEN 'A'
+        WHEN SUM(m.marks_obtained)/COUNT(m.subject) >= 70 THEN 'B'
+        WHEN SUM(m.marks_obtained)/COUNT(m.subject) >= 50 THEN 'C'
         ELSE 'F'
     END AS grade
 FROM Student s
 JOIN Marks m ON s.student_id = m.student_id
 GROUP BY s.student_id;
 
+-- Students with grade A or B
 SELECT s.first_name, s.last_name, r.grade
 FROM Student s
 JOIN Result r ON s.student_id = r.student_id
 WHERE r.grade IN ('A', 'B');
 
+-- Conditional selection with parentheses for precedence
 SELECT * FROM Student
-WHERE department = 'CSE' AND year_of_study >= 2 OR age < 19;
+WHERE (department = 'CSE' AND year_of_study >= 2) OR age < 19;
 
+-- Department stats
 SELECT department, COUNT(student_id) AS total_students, AVG(age) AS avg_age
 FROM Student
 GROUP BY department;
 
+-- Full name and marks gap
 SELECT 
-    UPPER(first_name || ' ' || last_name) AS full_name,
-    ABS(percentage - 100) AS marks_gap
+    CONCAT(UPPER(s.first_name), ' ', UPPER(s.last_name)) AS full_name,
+    ABS(r.percentage - 100) AS marks_gap
 FROM Result r
 JOIN Student s ON s.student_id = r.student_id;
 
+-- Top 3 students by percentage
 SELECT s.first_name, s.last_name, r.percentage
 FROM Student s
 JOIN Result r ON s.student_id = r.student_id
 WHERE r.percentage >= 70
 ORDER BY r.percentage DESC
-FETCH FIRST 3 ROWS ONLY;
+LIMIT 3;
 
+-- Union of CSE and IT students
 SELECT student_id, department FROM Student WHERE department = 'CSE'
 UNION
 SELECT student_id, department FROM Student WHERE department = 'IT';
 
+-- Students with grade F or percentage < 50
 SELECT s.first_name, s.last_name, r.percentage, r.grade
 FROM Student s
 JOIN Result r ON s.student_id = r.student_id
