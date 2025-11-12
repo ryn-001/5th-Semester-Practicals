@@ -1,0 +1,11 @@
+Task Name,Duration,Planned Start Date,Planned Finish Date,Assigned,Percent Complete,Planned Hours,Planned Cost,Planned Resource Cost,Actual Hours,Actual Cost,Actual Resource Cost,Status
+Project Initiation & Planning,4 days,6/1/2025,6/5/2025,"Admin Team, Principal",100,96,7200,6720,96,7200,6720,Complete
+Define Admission Policy & Eligibility Criteria,5 days,6/6/2025,6/12/2025,"Academic Committee, Registrar",90,120,9000,8400,108,8100,7560,In Progress
+Develop Online Admission Portal,11 days,6/13/2025,6/27/2025,"IT Team, Developers",80,264,21120,19800,211,16896,15840,In Progress
+Open Application Form for Students,6 days,6/30/2025,7/7/2025,"IT Team, Admin Staff",70,144,10800,10080,101,7560,7056,In Progress
+Application Review & Verification,11 days,7/8/2025,7/22/2025,"Review Committee, Faculty",50,264,19800,18480,132,9900,9240,In Progress
+Conduct Entrance/Merit List Generation,8 days,7/23/2025,8/1/2025,"Exam Committee, IT Team",30,192,15360,14400,58,4608,4320,In Progress
+Counseling & Seat Allotment,14 days,8/4/2025,8/21/2025,"Counseling Team, Faculty",25,336,25200,23520,84,6300,5880,In Progress
+Fee Payment & Admission Confirmation,7 days,8/22/2025,9/1/2025,"Finance Team, Admin",20,168,13440,12600,34,2688,2520,In Progress
+Orientation Program for Admitted Students,5 days,9/1/2025,9/5/2025,"Student Affairs, Faculty",0,120,9000,8400,0,0,0,To Do
+Final Report & Monitoring Review,3 days,9/8/2025,9/10/2025,"Principal, Admin Team",0,72,5400,5040,0,0,0,To Do

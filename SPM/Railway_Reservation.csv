@@ -1,0 +1,27 @@
+Task Name,Duration,Planned Start Date,Planned Finish Date,Assigned,Percent Complete,Planned Hours,Planned Cost,Planned Resource Cost,Actual Hours,Actual Cost,Actual Resource Cost,Status
+Project TrackOne - Railway Reservation System,160 days,1/15/2025,8/26/2025,Alex Chen,0,5120,384000,358400,0,0,0,To Do
+Phase 1: Discovery & Planning,22 days,1/15/2025,2/13/2025,Alex Chen,0,704,52800,49600,0,0,0,To Do
+Project Kick-off & Requirements Gathering,13 days,1/15/2025,1/31/2025,"Alex Chen, Sarah Jones",0,416,31200,29120,0,0,0,To Do
+System Architecture & Planning,10 days,2/3/2025,2/14/2025,"Maria Garcia, Ben Carter",0,320,27200,25600,0,0,0,To Do
+M1: Project Plan Signed Off,1 day,2/17/2025,2/17/2025,Alex Chen,100,8,600,560,8,600,560,Complete
+Phase 2: Design & Prototyping,20 days,2/17/2025,3/14/2025,"David Kim, Maria Garcia",0,640,51200,48000,0,0,0,To Do
+UI/UX & System Design,15 days,2/17/2025,3/7/2025,"David Kim, Maria Garcia, Chloe Smith",0,480,38400,36000,0,0,0,To Do
+Design Review & Client Approval,5 days,3/10/2025,3/14/2025,"Alex Chen, David Kim, Maria Garcia",0,160,12800,12000,0,0,0,To Do
+M2: Design Approved,1 day,3/17/2025,3/17/2025,Alex Chen,100,8,600,560,8,600,560,Complete
+Phase 3: Core Development,65 days,3/17/2025,6/13/2025,"Ben Carter, Chloe Smith, Tom Baker",0,2080,166400,156000,0,0,0,To Do
+User Auth & Train Management,15 days,3/17/2025,4/4/2025,"Ben Carter, Chloe Smith",0,480,38400,36000,0,0,0,To Do
+Booking & Payment System,20 days,4/7/2025,5/2/2025,"Ben Carter, Chloe Smith, Tom Baker",0,640,51200,48000,0,0,0,To Do
+Admin Dashboard & Reporting,15 days,5/5/2025,5/23/2025,"Ben Carter, Chloe Smith",0,480,38400,36000,0,0,0,To Do
+M3: Development Complete,1 day,5/26/2025,5/26/2025,Alex Chen,100,8,600,560,8,600,560,Complete
+Phase 4: Testing & QA,26 days,5/26/2025,6/30/2025,"Priya Patel, QA Team",0,832,62400,58240,0,0,0,To Do
+System Integration Testing,15 days,5/26/2025,6/13/2025,"Priya Patel, QA Team",0,480,36000,33600,0,0,0,To Do
+User Acceptance Testing,10 days,6/16/2025,6/27/2025,"Priya Patel, Sarah Jones",0,320,24000,22400,0,0,0,To Do
+M4: Testing Complete,1 day,6/30/2025,6/30/2025,Alex Chen,100,8,600,560,8,600,560,Complete
+Phase 5: Deployment,15 days,6/30/2025,7/18/2025,"Tom Baker, Ben Carter",0,480,38400,36000,0,0,0,To Do
+Production Setup & Data Migration,10 days,6/30/2025,7/11/2025,"Tom Baker, Ben Carter",0,320,25600,24000,0,0,0,To Do
+Go-Live Deployment,5 days,7/14/2025,7/18/2025,"Tom Baker, Ben Carter, Alex Chen",0,160,12800,12000,0,0,0,To Do
+M5: System Live,1 day,7/21/2025,7/21/2025,Alex Chen,100,8,600,560,8,600,560,Complete
+Phase 6: Post-Launch,25 days,7/21/2025,8/22/2025,"Alex Chen, Team",0,800,60000,56000,0,0,0,To Do
+Hypercare Support & Training,15 days,7/21/2025,8/8/2025,"Ben Carter, Chloe Smith, Tom Baker",0,480,38400,36000,0,0,0,To Do
+Project Closure & Documentation,10 days,8/11/2025,8/22/2025,"Alex Chen, Sarah Jones",0,320,21600,20000,0,0,0,To Do
+M6: Project Completed,1 day,8/25/2025,8/25/2025,Alex Chen,100,8,600,560,8,600,560,Complete

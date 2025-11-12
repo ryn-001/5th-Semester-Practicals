@@ -1,0 +1,32 @@
+Task Name,Duration,Planned Start Date,Planned Finish Date,Assigned,Percent Complete,Planned Hours,Planned Cost,Actual Cost,Earned Value,Cost Variance,Schedule Variance,CPI,SPI,Critical Task,Milestone,Slipping,Status
+Ticket Management System,175 days,2/1/2025,9/30/2025,Project Manager,58,3500,220000,112000,127600,15600,-24000,1.14,0.93,false,false,false,In Progress
+Phase 1: Planning,25 days,2/1/2025,3/7/2025,Project Manager,100,400,60000,59200,60000,800,0,1.01,1.00,true,false,false,Complete
+Project Kickoff,3 days,2/1/2025,2/5/2025,Project Manager,100,48,7200,7100,7200,100,0,1.01,1.00,true,false,false,Complete
+Requirements Gathering,10 days,2/6/2025,2/19/2025,Business Analyst,100,160,24000,23500,24000,500,0,1.02,1.00,true,false,false,Complete
+Stakeholder Analysis,5 days,2/20/2025,2/26/2025,Business Analyst,100,80,12000,11800,12000,200,0,1.02,1.00,false,false,false,Complete
+Technical Specification,7 days,2/27/2025,3/7/2025,System Architect,100,112,16800,16800,16800,0,0,1.00,1.00,true,false,false,Complete
+M1: Planning Complete,0 days,3/10/2025,3/10/2025,Project Manager,100,0,0,0,0,0,0,0.00,0.00,false,true,false,Complete
+Phase 2: Design,30 days,3/10/2025,4/18/2025,System Architect,100,480,45000,46500,45000,-1500,0,0.97,1.00,true,false,false,Complete
+System Architecture,12 days,3/10/2025,3/25/2025,System Architect,100,192,18000,18500,18000,-500,0,0.97,1.00,true,false,false,Complete
+Database Design,8 days,3/26/2025,4/4/2025,Database Architect,100,128,12000,12500,12000,-500,0,0.96,1.00,true,false,false,Complete
+UI/UX Design,10 days,4/7/2025,4/18/2025,UI Designer,100,160,15000,15500,15000,-500,0,0.97,1.00,false,false,false,Complete
+M2: Design Complete,0 days,4/21/2025,4/21/2025,Project Manager,100,0,0,0,0,0,0,0.00,0.00,false,true,false,Complete
+Phase 3: Development,80 days,4/21/2025,8/8/2025,Tech Lead,65,1280,80000,62300,56000,-6300,-24000,0.90,0.70,true,false,true,In Progress
+Backend Foundation,15 days,4/21/2025,5/9/2025,Backend Developer,100,240,15000,14200,15000,800,0,1.06,1.00,true,false,false,Complete
+User Authentication,12 days,5/12/2025,5/27/2025,Backend Developer,90,192,12000,11500,10800,-700,-1200,0.94,0.90,true,false,false,In Progress
+Ticket Core Module,25 days,5/28/2025,7/2/2025,Full Stack Dev,60,400,25000,21000,15000,-6000,-10000,0.71,0.60,true,false,true,In Progress
+Notification System,18 days,7/3/2025,7/28/2025,Backend Developer,30,288,18000,12600,5400,-7200,-12600,0.43,0.30,true,false,false,In Progress
+Reporting Dashboard,15 days,7/29/2025,8/16/2025,Frontend Developer,0,240,15000,0,0,0,-15000,0.00,0.00,true,false,false,To Do
+API Integration,10 days,8/19/2025,8/30/2025,Backend Developer,0,160,10000,0,0,0,-10000,0.00,0.00,false,false,false,To Do
+M3: Development Complete,0 days,9/2/2025,9/2/2025,Project Manager,0,0,0,0,0,0,0,0.00,0.00,false,true,false,To Do
+Phase 4: Testing,35 days,9/3/2025,10/17/2025,QA Lead,0,560,35000,0,0,0,-35000,0.00,0.00,true,false,false,To Do
+Unit Testing,10 days,9/3/2025,9/16/2025,QA Engineer,0,160,10000,0,0,0,-10000,0.00,0.00,false,false,false,To Do
+Integration Testing,12 days,9/17/2025,10/2/2025,QA Engineer,0,192,12000,0,0,0,-12000,0.00,0.00,true,false,false,To Do
+User Acceptance Testing,8 days,10/3/2025,10/14/2025,QA Lead,0,128,8000,0,0,0,-8000,0.00,0.00,true,false,false,To Do
+Performance Testing,5 days,10/15/2025,10/21/2025,QA Engineer,0,80,5000,0,0,0,-5000,0.00,0.00,false,false,false,To Do
+M4: Testing Complete,0 days,10/22/2025,10/22/2025,Project Manager,0,0,0,0,0,0,0,0.00,0.00,false,true,false,To Do
+Phase 5: Deployment,15 days,10/23/2025,11/12/2025,DevOps Engineer,0,240,20000,0,0,0,-20000,0.00,0.00,true,false,false,To Do
+Production Setup,5 days,10/23/2025,10/29/2025,DevOps Engineer,0,80,6667,0,0,0,-6667,0.00,0.00,true,false,false,To Do
+Data Migration,6 days,10/30/2025,11/6/2025,Database Admin,0,96,8000,0,0,0,-8000,0.00,0.00,true,false,false,To Do
+Go-Live,4 days,11/7/2025,11/12/2025,DevOps Engineer,0,64,5333,0,0,0,-5333,0.00,0.00,true,false,false,To Do
+M5: System Live,0 days,11/13/2025,11/13/2025,Project Manager,0,0,0,0,0,0,0,0.00,0.00,false,true,false,To Do

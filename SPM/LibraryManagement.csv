@@ -1,0 +1,29 @@
+Task Name,Duration,Planned Start Date,Planned Finish Date,Assigned,Percent Complete,Planned Hours,Planned Cost,Status,Milestone
+Library Management System,160 days,1/15/2025,8/30/2025,Project Manager,65,2560,185000,In Progress,false
+Phase 1: Planning & Design,30 days,1/15/2025,2/28/2025,Project Manager,100,480,32000,Complete,false
+Project Initiation,5 days,1/15/2025,1/21/2025,Project Manager,100,80,6000,Complete,false
+Requirements Gathering,10 days,1/22/2025,2/4/2025,Business Analyst,100,160,12000,Complete,false
+System Design,8 days,2/5/2025,2/14/2025,System Architect,100,128,10240,Complete,false
+UI/UX Design,7 days,2/17/2025,2/25/2025,UI Designer,100,112,8400,Complete,false
+M1: Design Complete,0 days,2/28/2025,2/28/2025,Project Manager,100,0,0,Complete,true
+Phase 2: Development,80 days,3/3/2025,6/21/2025,Tech Lead,70,1280,89000,In Progress,false
+Database Setup,10 days,3/3/2025,3/14/2025,Database Admin,90,160,12800,In Progress,false
+Backend Development,45 days,3/17/2025,5/16/2025,Backend Developer,75,720,57600,In Progress,false
+Frontend Development,40 days,3/24/2025,5/16/2025,Frontend Developer,70,640,51200,In Progress,false
+API Integration,25 days,5/19/2025,6/20/2025,Backend Developer,40,400,32000,In Progress,false
+M2: Development Complete,0 days,6/23/2025,6/23/2025,Project Manager,0,0,0,To Do,true
+Phase 3: Testing,25 days,6/24/2025,7/25/2025,QA Lead,0,400,28000,To Do,false
+Unit Testing,10 days,6/24/2025,7/7/2025,QA Engineer,0,160,11200,To Do,false
+Integration Testing,8 days,7/8/2025,7/17/2025,QA Engineer,0,128,8960,To Do,false
+UAT Testing,7 days,7/18/2025,7/25/2025,QA Lead,0,112,7840,To Do,false
+M3: Testing Complete,0 days,7/26/2025,7/26/2025,Project Manager,0,0,0,To Do,true
+Phase 4: Deployment,15 days,7/29/2025,8/14/2025,DevOps Engineer,0,240,20000,To Do,false
+Production Setup,5 days,7/29/2025,8/2/2025,DevOps Engineer,0,80,6667,To Do,false
+Data Migration,6 days,8/5/2025,8/12/2025,Database Admin,0,96,8000,To Do,false
+Go-Live,4 days,8/13/2025,8/14/2025,DevOps Engineer,0,64,5333,To Do,false
+M4: System Live,0 days,8/15/2025,8/15/2025,Project Manager,0,0,0,To Do,true
+Phase 5: Training & Closure,15 days,8/18/2025,8/30/2025,Project Manager,0,240,16000,To Do,false
+User Training,8 days,8/18/2025,8/27/2025,Training Specialist,0,128,8533,To Do,false
+Documentation,4 days,8/28/2025,9/2/2025,Technical Writer,0,64,4267,To Do,false
+Project Closure,3 days,9/3/2025,9/5/2025,Project Manager,0,48,3200,To Do,false
+M5: Project Complete,0 days,9/5/2025,9/5/2025,Project Manager,0,0,0,To Do,true
